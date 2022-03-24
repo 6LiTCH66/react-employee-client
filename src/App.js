@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from "./components/Header/Header";
+import {Route, Routes} from "react-router-dom";
+import EmployeeTable from  "./components/Table/Employee-table/Employee-table";
+import UsersTable from "./components/Table/User-table/Users-table";
+import VastusedTable from "./components/Table/Vastused-table/Vastused-table";
+import Login from "./components/Auth/Login/Login";
+import Registration from "./components/Auth/Registration/Registration";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header/>
+        <Routes>
+            <Route path="/" element={<EmployeeTable/>}/>
+            <Route path="/users" element={<UsersTable/>}/>
+            <Route path="/vastused" element={<VastusedTable/>}/>
+
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/registration" element={<Registration/>}/>
+        </Routes>
+
     </div>
   );
 }
