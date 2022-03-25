@@ -72,7 +72,7 @@ const ResponsiveAppBar = () => {
 
                             <MenuItem>
                                 <Typography textAlign="center">
-                                    <Link style={{textDecoration: "none", color: "black"}} to="/vastused">
+                                    <Link style={{textDecoration: "none", color: "black"}} to="/vastused" >
                                         Vastused.ee
                                     </Link>
                                 </Typography>
@@ -114,6 +114,20 @@ const ResponsiveAppBar = () => {
                         <Button
                             sx={{ my: 2, color: 'white', display: 'block' }} onClick={() => alert("Logout")}>
                             Logout
+                        </Button>
+
+                        <Button
+                            sx={{ my: 2, color: 'white', display: 'block' }}>
+                            <Link style={{textDecoration: "none", color: "white"}} to="/login">
+                                Sign in
+                            </Link>
+                        </Button>
+
+                        <Button
+                            sx={{ my: 2, color: 'white', display: 'block' }}>
+                            <Link style={{textDecoration: "none", color: "white"}} to="/registration">
+                                Sign up
+                            </Link>
                         </Button>
                     </Box>
                 </Toolbar>

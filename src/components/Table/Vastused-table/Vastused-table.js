@@ -60,12 +60,17 @@ export default function VastusedTable() {
     };
 
     useEffect(() => {
-        fetch("https://employee-webserver.herokuapp.com/scraping/vastused/")
-            .then(res => res.json())
-            .then((data) => {
-                setState(data)
-            })
-    })
+        let cleanupFunction = false;
+        const fetchData = async () => {
+            await fetch("https://employee-webserver.herokuapp.com/scraping/vastused/")
+                .then(res => res.json())
+                .then((data) => {
+                    if(!cleanupFunction) setState(data);
+                })
+        }
+        fetchData().catch(console.error)
+        return () => cleanupFunction = true;
+    }, [])
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>

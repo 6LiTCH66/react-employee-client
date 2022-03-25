@@ -12,18 +12,18 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import {LoginAuth} from "../../../Services/Auth/Auth-services"
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
 export default function Login() {
+    const navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        LoginAuth(data.get("email"), data.get("password"), navigate)
     };
 
     return (

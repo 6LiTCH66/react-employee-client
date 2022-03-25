@@ -13,17 +13,20 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import {RegistrationAuth} from "../../../Services/Auth/Auth-services"
+import { useNavigate } from "react-router-dom";
+
 
 const theme = createTheme();
 
 export default function Registration() {
+
+    const navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        RegistrationAuth(data.get("email"), data.get("password"), navigate)
+
     };
 
     return (
