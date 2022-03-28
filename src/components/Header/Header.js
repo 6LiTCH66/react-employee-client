@@ -9,10 +9,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useGlobalState} from "../../StateAuth";
+import {Logout} from "../../Services/Auth/Auth-services";
 
 const ResponsiveAppBar = () => {
+    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [isAuthenticated] = useGlobalState("isAuth")
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -53,7 +57,6 @@ const ResponsiveAppBar = () => {
                             sx={{
                                 display: { xs: 'block', md: 'none' },
                             }}>
-
                             <MenuItem>
                                 <Typography textAlign="center">
                                     <Link style={{textDecoration: "none", color: "black"}} to="/">
@@ -61,6 +64,7 @@ const ResponsiveAppBar = () => {
                                     </Link>
                                 </Typography>
                             </MenuItem>
+
 
                             <MenuItem>
                                 <Typography textAlign="center">
@@ -88,48 +92,60 @@ const ResponsiveAppBar = () => {
                     >
                         Employee
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    {isAuthenticated ? (
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}>
-                            <Link style={{textDecoration: "none", color: "white"}} to="/">
-                                Employee
-                            </Link>
-                        </Button>
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}>
+                                <Link style={{textDecoration: "none", color: "white"}} to="/">
+                                    Employee
+                                </Link>
+                            </Button>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}>
-                            <Link style={{textDecoration: "none", color: "white"}} to="/users">
-                                Users
-                            </Link>
-                        </Button>
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}>
+                                <Link style={{textDecoration: "none", color: "white"}} to="/users">
+                                    Users
+                                </Link>
+                            </Button>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}>
-                            <Link style={{textDecoration: "none", color: "white"}} to="/vastused">
-                                Vastused.ee
-                            </Link>
-                        </Button>
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}>
+                                <Link style={{textDecoration: "none", color: "white"}} to="/vastused">
+                                    Vastused.ee
+                                </Link>
+                            </Button>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }} onClick={() => alert("Logout")}>
-                            Logout
-                        </Button>
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }} onClick={() => Logout(navigate)}>
+                                Logout
+                            </Button>
+                        </Box>
+                    ):(
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}>
+                                <Link style={{textDecoration: "none", color: "white"}} to="/login">
+                                    Sign in
+                                </Link>
+                            </Button>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}>
-                            <Link style={{textDecoration: "none", color: "white"}} to="/login">
-                                Sign in
-                            </Link>
-                        </Button>
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}>
+                                <Link style={{textDecoration: "none", color: "white"}} to="/registration">
+                                    Sign up
+                                </Link>
+                            </Button>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}>
-                            <Link style={{textDecoration: "none", color: "white"}} to="/registration">
-                                Sign up
-                            </Link>
-                        </Button>
-                    </Box>
+                        </Box>
+
+
+
+                    )}
+
+
+
+
                 </Toolbar>
             </Container>
         </AppBar>

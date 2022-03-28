@@ -5,8 +5,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import {useState, useRef} from "react";
-import SnackBar from "../Snackbar/Snackbar";
-import updateVastused from "../../Services/Vastused/Vastused-services";
+import SnackBar from "../../Snackbar/Snackbar";
+import {updateVastused} from "../../../Services/Vastused/Vastused-services";
 
 import "./Add-highlight.css"
 
@@ -97,14 +97,12 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
 
 
-
-
     return (
         <Dialog open={isDialogOpened} onClose={handleClose} >
-            <SnackBar
-                isSnackbarOpened={isOpen}
-                handleCloseSnackbar={() => setIsOpen(false)}
-            />
+            {/*<SnackBar*/}
+            {/*    isSnackbarOpened={isOpen}*/}
+            {/*    handleCloseSnackbar={() => setIsOpen(false)}*/}
+            {/*/>*/}
             <DialogTitle>Vastused id:{id}</DialogTitle>
             <DialogContent>
                 <TextField

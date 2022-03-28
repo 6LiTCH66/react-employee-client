@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import {useEffect} from "react";
+import {setGlobalState} from "../../../StateAuth";
 
 const columns = [
     { id: 'name', label: 'Name', minWidth: 170 },
@@ -78,6 +79,14 @@ export default function UsersTable() {
     //             console.log(data)
     //         })
     // })
+
+    useEffect(() => {
+        if (localStorage.getItem("currentUser")){
+            setGlobalState("isAuth", true)
+        }else {
+            setGlobalState("isAuth", false)
+        }
+    }, [])
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>

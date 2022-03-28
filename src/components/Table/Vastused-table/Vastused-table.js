@@ -10,9 +10,11 @@ import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
-import AddHighlight from "../../Dialog/Add-highlight";
+import AddHighlight from "../../Dialog/Add-Highlight/Add-highlight";
 
 import "./Vastused-table.css"
+import {setGlobalState} from "../../../StateAuth";
+import {getVastused} from "../../../Services/Vastused/Vastused-services";
 
 const columns = [
     { id: 'id', label: 'ID' },
@@ -31,8 +33,10 @@ const columns = [
 
 
 export default function VastusedTable() {
+    const [data, setData] = useState([])
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [cleanupFunction, setCleanupFunction] = useState(false)
 
     const [questionTitle, setQuestionTitle] = useState("");
     const [questionDescription, setQuestionDescription] = useState("");
@@ -59,17 +63,35 @@ export default function VastusedTable() {
         setId(id)
     };
 
+    const fetchData = () => {
+        // await fetch("https://employee-webserver.herokuapp.com/scraping/vastused/")
+        //     .then(res => res.json())
+        //     .then((data) => {
+        //         console.log()
+        //         setState(data)
+        //         // if(!cleanupFunction) setState(data);
+        //     })
+        getVastused().then(res => {
+            setState(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
     useEffect(() => {
-        let cleanupFunction = false;
-        const fetchData = async () => {
-            await fetch("https://employee-webserver.herokuapp.com/scraping/vastused/")
-                .then(res => res.json())
-                .then((data) => {
-                    if(!cleanupFunction) setState(data);
-                })
+
+
+        if (localStorage.getItem("currentUser")){
+            setGlobalState("isAuth", true)
+        }else {
+            setGlobalState("isAuth", false)
         }
-        fetchData().catch(console.error)
-        return () => cleanupFunction = true;
+
+        // setCleanupFunction(false)
+        fetchData()
+
+        // fetchData().catch(console.error)
+        // return () => setCleanupFunction(true)
     }, [])
 
     return (
@@ -80,10 +102,11 @@ export default function VastusedTable() {
                 question_title={questionTitle}
                 question_description={questionDescription}
                 answer_description={answerDescription}
-                id={id}/>
+                id={id}
+            />
 
             <TableContainer>
-                <Table stickyHeader aria-label="sticky table" >
+                <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
