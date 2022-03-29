@@ -13,7 +13,7 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import AddHighlight from "../../Dialog/Add-Highlight/Add-highlight";
 
 import "./Vastused-table.css"
-import {setGlobalState} from "../../../StateAuth";
+import {setGlobalState, useGlobalState} from "../../../StateAuth";
 import {getVastused} from "../../../Services/Vastused/Vastused-services";
 
 const columns = [
@@ -42,6 +42,7 @@ export default function VastusedTable() {
     const [questionDescription, setQuestionDescription] = useState("");
     const [answerDescription, setAnswerDescription] = useState("");
     const [id, setId] = useState("");
+    const [refreshVastused] = useGlobalState("refreshVastused")
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -64,13 +65,6 @@ export default function VastusedTable() {
     };
 
     const fetchData = () => {
-        // await fetch("https://employee-webserver.herokuapp.com/scraping/vastused/")
-        //     .then(res => res.json())
-        //     .then((data) => {
-        //         console.log()
-        //         setState(data)
-        //         // if(!cleanupFunction) setState(data);
-        //     })
         getVastused().then(res => {
             setState(res.data)
         }).catch(err => {
@@ -79,20 +73,24 @@ export default function VastusedTable() {
     }
 
     useEffect(() => {
-
-
         if (localStorage.getItem("currentUser")){
             setGlobalState("isAuth", true)
         }else {
             setGlobalState("isAuth", false)
         }
 
-        // setCleanupFunction(false)
         fetchData()
 
-        // fetchData().catch(console.error)
-        // return () => setCleanupFunction(true)
     }, [])
+
+    useEffect(() =>{
+        if (refreshVastused){
+            getVastused().then(res => {
+                setState(res.data)
+                setGlobalState("refreshVastused", false)
+            })
+        }
+    })
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>

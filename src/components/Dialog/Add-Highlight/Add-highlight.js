@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useState, useRef} from "react";
 import SnackBar from "../../Snackbar/Snackbar";
 import {updateVastused} from "../../../Services/Vastused/Vastused-services";
-
+import {setGlobalState, useGlobalState} from "../../../StateAuth";
 import "./Add-highlight.css"
 
 export default function AddHighlight({ isDialogOpened, handleCloseDialog, question_title, question_description, answer_description, id  }) {
@@ -42,6 +42,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             updateVastused(toJson, id)
             handleOpen()
             handleCloseDialog(true)
+            setGlobalState("refreshVastused", true)
         }else {
             alert("Please highlight the text!")
         }
@@ -64,6 +65,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
             handleOpen()
             handleCloseDialog(true)
+            setGlobalState("refreshVastused", true)
         }
         else {
             alert("Please highlight the text!")
@@ -88,6 +90,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
             handleOpen()
             handleCloseDialog(true)
+            setGlobalState("refreshVastused", true)
         }
         else {
             alert("Please highlight the text!")
