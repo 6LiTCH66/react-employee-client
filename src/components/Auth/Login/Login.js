@@ -14,10 +14,13 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {LoginAuth} from "../../../Services/Auth/Auth-services"
 import { useNavigate } from "react-router-dom";
+import SnackBar from "../../Snackbar/Snackbar";
+import {setGlobalState, useGlobalState} from "../../../StateAuth";
 
 const theme = createTheme();
 
 export default function Login() {
+    const [openSnackBar] = useGlobalState("showSnackBar")
     const navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -28,6 +31,11 @@ export default function Login() {
 
     return (
         <ThemeProvider theme={theme}>
+            <SnackBar
+                isSnackbarOpened={openSnackBar}
+                handleCloseSnackbar={() => setGlobalState("showSnackBar", false)}
+                message="Invalid Credentials"
+            />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -75,8 +83,8 @@ export default function Login() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
+                                <Link href="change-password" variant="body2">
+                                    Reset password
                                 </Link>
                             </Grid>
                             <Grid item>

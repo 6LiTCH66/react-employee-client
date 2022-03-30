@@ -19,6 +19,7 @@ import {getEmployee} from "../../../Services/Employee/Employee-services";
 import "./Employee-table.css"
 import EditEmployee from "../../Dialog/Edit-employee/Edit-employee";
 import DeleteEmployee from "../../Dialog/Delete-employee/Delete-employee";
+import SnackBar from "../../Snackbar/Snackbar";
 
 
 
@@ -59,6 +60,7 @@ export default function EmployeeTable() {
 
     const [createdAt, setCreatedAt] = useState("")
     const [updatedAt, setUpdatedAt] = useState("")
+    const [openSnackBar] = useGlobalState("showSnackBar")
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -152,6 +154,12 @@ export default function EmployeeTable() {
                 email={email}
                 created_at={createdAt}
                 updated_at={updatedAt}
+            />
+
+            <SnackBar
+                isSnackbarOpened={openSnackBar}
+                handleCloseSnackbar={() => setGlobalState("showSnackBar", false)}
+                message="Data was successful updated"
             />
 
             <TableContainer>

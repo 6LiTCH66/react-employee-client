@@ -41,6 +41,7 @@ export default function EditEmployee({isDialogOpened, handleCloseDialog, id, fir
                 .then(res => {
                     handleCloseDialog(false);
                     setGlobalState("refreshEmployee", true)
+                    setGlobalState("showSnackBar", true)
             })
 
         }

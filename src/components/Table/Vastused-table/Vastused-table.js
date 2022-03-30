@@ -15,6 +15,7 @@ import AddHighlight from "../../Dialog/Add-Highlight/Add-highlight";
 import "./Vastused-table.css"
 import {setGlobalState, useGlobalState} from "../../../StateAuth";
 import {getVastused} from "../../../Services/Vastused/Vastused-services";
+import SnackBar from "../../Snackbar/Snackbar";
 
 const columns = [
     { id: 'id', label: 'ID' },
@@ -43,6 +44,7 @@ export default function VastusedTable() {
     const [answerDescription, setAnswerDescription] = useState("");
     const [id, setId] = useState("");
     const [refreshVastused] = useGlobalState("refreshVastused")
+    const [openSnackBar] = useGlobalState("showSnackBar")
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -92,6 +94,7 @@ export default function VastusedTable() {
         }
     })
 
+
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <AddHighlight
@@ -101,6 +104,11 @@ export default function VastusedTable() {
                 question_description={questionDescription}
                 answer_description={answerDescription}
                 id={id}
+            />
+            <SnackBar
+                isSnackbarOpened={openSnackBar}
+                handleCloseSnackbar={() => setGlobalState("showSnackBar", false)}
+                message="Data was successful highlighted"
             />
 
             <TableContainer>

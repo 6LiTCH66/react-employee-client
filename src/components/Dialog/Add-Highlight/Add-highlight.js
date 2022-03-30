@@ -43,6 +43,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             handleOpen()
             handleCloseDialog(true)
             setGlobalState("refreshVastused", true)
+            setGlobalState("showSnackBar", true)
         }else {
             alert("Please highlight the text!")
         }
@@ -66,6 +67,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             handleOpen()
             handleCloseDialog(true)
             setGlobalState("refreshVastused", true)
+            setGlobalState("showSnackBar", true)
         }
         else {
             alert("Please highlight the text!")
@@ -91,6 +93,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             handleOpen()
             handleCloseDialog(true)
             setGlobalState("refreshVastused", true)
+            setGlobalState("showSnackBar", true)
         }
         else {
             alert("Please highlight the text!")
@@ -102,10 +105,6 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
     return (
         <Dialog open={isDialogOpened} onClose={handleClose} >
-            {/*<SnackBar*/}
-            {/*    isSnackbarOpened={isOpen}*/}
-            {/*    handleCloseSnackbar={() => setIsOpen(false)}*/}
-            {/*/>*/}
             <DialogTitle>Vastused id:{id}</DialogTitle>
             <DialogContent>
                 <TextField

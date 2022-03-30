@@ -15,11 +15,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import {RegistrationAuth} from "../../../Services/Auth/Auth-services"
 import { useNavigate } from "react-router-dom";
+import SnackBar from "../../Snackbar/Snackbar";
+import {setGlobalState, useGlobalState} from "../../../StateAuth";
 
 
 const theme = createTheme();
 
 export default function Registration() {
+    const [openSnackBar] = useGlobalState("showSnackBar")
 
     const navigate = useNavigate();
     const handleSubmit = (event) => {
@@ -31,6 +34,12 @@ export default function Registration() {
 
     return (
         <ThemeProvider theme={theme}>
+            <SnackBar
+                isSnackbarOpened={openSnackBar}
+                handleCloseSnackbar={() => setGlobalState("showSnackBar", false)}
+                message="User already exist. Please Login"
+
+            />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box

@@ -4,7 +4,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-export default function SnackBar({isSnackbarOpened, handleCloseSnackbar}) {
+export default function SnackBar({isSnackbarOpened, handleCloseSnackbar, message}) {
 
     const handleClick = () => {
         handleCloseSnackbar(true);
@@ -18,18 +18,6 @@ export default function SnackBar({isSnackbarOpened, handleCloseSnackbar}) {
         handleCloseSnackbar(false);
     };
 
-    const action = (
-        <React.Fragment>
-            <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={handleClose}
-            >
-                <CloseIcon fontSize="small" />
-            </IconButton>
-        </React.Fragment>
-    );
 
     return (
         <div>
@@ -38,8 +26,7 @@ export default function SnackBar({isSnackbarOpened, handleCloseSnackbar}) {
                 open={isSnackbarOpened}
                 autoHideDuration={2000}
                 onClose={handleClose}
-                message="Data was successful highlighted"
-                // action={action}
+                message={message}
             />
         </div>
     );

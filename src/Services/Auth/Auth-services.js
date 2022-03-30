@@ -13,7 +13,10 @@ function refreshToken(){
                 localStorage.removeItem("currentUser")
                 localStorage.removeItem("initialTime")
             }
-        })
+        }).catch(err => {
+        localStorage.removeItem("currentUser")
+        localStorage.removeItem("initialTime")
+    })
 }
 
 let refreshTokenTimeout;
@@ -43,12 +46,17 @@ function stopRefreshTokenTimer(){
     localStorage.removeItem("initialTime");
     clearInterval(refreshTokenTimeout)
 }
+
 function verifyEmail(){
     var email = localStorage.getItem("userEmail")
     axios.post(AUTH_URL + "/resent-email/" + email, {})
         .then(res => {
-            console.log(res)
+            setGlobalState("showSnackBar", true)
         })
+}
+function changePassword(email, password, newPassword){
+    return axios.post(AUTH_URL + "/change", {email, password, newPassword})
+
 }
 
 function LoginAuth(email, password, navigate){
@@ -61,7 +69,9 @@ function LoginAuth(email, password, navigate){
             setGlobalState("isAuth", true)
             startRefreshTokenTimer()
             navigate("/")
-        })
+        }).catch(err => {
+            setGlobalState("showSnackBar", true)
+    })
 
 }
 
@@ -73,9 +83,8 @@ function RegistrationAuth(email, password, navigate){
                 navigate("/verify-email")
                 localStorage.setItem("userEmail", email)
             }
-            else{
-                alert("Error")
-            }
+    }).catch(err => {
+        setGlobalState("showSnackBar", true)
     })
 
 }
@@ -94,5 +103,6 @@ export {
     RegistrationAuth,
     Logout,
     startRefreshTokenTimer,
-    verifyEmail
+    verifyEmail,
+    changePassword
 }
