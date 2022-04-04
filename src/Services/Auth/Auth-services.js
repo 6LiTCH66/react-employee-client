@@ -95,7 +95,10 @@ function Logout(navigate){
             setGlobalState("isAuth", false)
             stopRefreshTokenTimer()
             navigate("/login")
-        })
+        }).catch(err => {
+        localStorage.removeItem("currentUser")
+        localStorage.removeItem("initialTime")
+    })
 }
 
 export {

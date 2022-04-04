@@ -111,6 +111,9 @@ export default function EmployeeTable() {
         getEmployee().then(res => {
             console.log(res.status)
             setData(res.data);
+        }).catch(err => {
+            localStorage.removeItem("currentUser")
+            localStorage.removeItem("initialTime")
         })
 
     },[])

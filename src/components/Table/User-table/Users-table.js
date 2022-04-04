@@ -45,6 +45,9 @@ export default function UsersTable() {
 
         getUsers().then(res => {
             setUsers(res.data)
+        }).catch(err => {
+            localStorage.removeItem("currentUser")
+            localStorage.removeItem("initialTime")
         })
 
 

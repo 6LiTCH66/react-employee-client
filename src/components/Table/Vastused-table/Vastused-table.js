@@ -70,7 +70,8 @@ export default function VastusedTable() {
         getVastused().then(res => {
             setState(res.data)
         }).catch(err => {
-            console.log(err)
+            localStorage.removeItem("currentUser")
+            localStorage.removeItem("initialTime")
         })
     }
 
