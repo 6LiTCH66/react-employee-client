@@ -9,8 +9,9 @@ import Registration from "./components/Auth/Registration/Registration";
 import AuthGuard from "./Security/Auth-guard";
 import { startRefreshTokenTimer} from "./Services/Auth/Auth-services";
 import {useEffect} from "react";
-import VerifyEmail from "./components/Card/Verify-email";
+import ResendEmail from "./components/Card/Resend-email";
 import ChangePassword from "./components/Auth/Change-Password/Change-password";
+import VerifyEmail from "./components/Card/Verify-email";
 
 function App() {
     useEffect(() => {
@@ -46,6 +47,8 @@ function App() {
                 }/>
 
             <Route path="/verify-email" element={<VerifyEmail/>}/>
+
+            <Route path="/resend-email" element={<ResendEmail/>}/>
             <Route path="/change-password" element={<ChangePassword/>}/>
 
             <Route path="/login" element={<Login/>}/>

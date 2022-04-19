@@ -47,13 +47,22 @@ function stopRefreshTokenTimer(){
     clearInterval(refreshTokenTimeout)
 }
 
-function verifyEmail(){
+function resentEmail(){
     var email = localStorage.getItem("userEmail")
     axios.post(AUTH_URL + "/resent-email/" + email, {})
         .then(res => {
             setGlobalState("showSnackBar", true)
         })
 }
+
+function verifyEmail(){
+    var email = localStorage.getItem("userEmail")
+    axios.post(AUTH_URL + "/verify/" + email, {})
+        .then(res => {
+            setGlobalState("showSnackBar", true)
+        })
+}
+
 function changePassword(email, password, newPassword){
     return axios.post(AUTH_URL + "/change", {email, password, newPassword})
 
@@ -80,7 +89,8 @@ function RegistrationAuth(email, password, navigate){
         {email, password}, {withCredentials: true})
         .then(response => {
             if (response.statusText === "OK"){
-                navigate("/verify-email")
+                verifyEmail()
+                navigate("/resend-email")
                 localStorage.setItem("userEmail", email)
             }
     }).catch(err => {
@@ -106,6 +116,7 @@ export {
     RegistrationAuth,
     Logout,
     startRefreshTokenTimer,
-    verifyEmail,
-    changePassword
+    resentEmail,
+    changePassword,
+    verifyEmail
 }

@@ -38,7 +38,6 @@ export default function Registration() {
                 isSnackbarOpened={openSnackBar}
                 handleCloseSnackbar={() => setGlobalState("showSnackBar", false)}
                 message="User already exist. Please Login"
-
             />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
