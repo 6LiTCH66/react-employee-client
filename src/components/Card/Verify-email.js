@@ -4,9 +4,14 @@ import {setGlobalState, useGlobalState} from "../../StateAuth";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
+import {useEffect} from "react";
+import {verifyEmail} from "../../Services/Auth/Auth-services";
 
 export default function VerifyEmail(){
     const [openSnackBar] = useGlobalState("showSnackBar")
+    useEffect(() => {
+        verifyEmail()
+    }, [])
     return(
         <Card sx={{ maxWidth: 400, margin: 'auto', flexDirection: 'column', marginTop: 10 }}>
             <SnackBar

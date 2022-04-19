@@ -29,7 +29,6 @@ export default function Registration() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         RegistrationAuth(data.get("email"), data.get("password"), navigate)
-        verifyEmail(data.get("email"))
 
     };
 
