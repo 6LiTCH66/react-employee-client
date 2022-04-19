@@ -89,7 +89,6 @@ function RegistrationAuth(email, password, navigate){
         {email, password}, {withCredentials: true})
         .then(response => {
             if (response.statusText === "OK"){
-                verifyEmail()
                 navigate("/resend-email")
                 localStorage.setItem("userEmail", email)
             }

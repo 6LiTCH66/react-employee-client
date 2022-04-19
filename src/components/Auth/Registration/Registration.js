@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import {RegistrationAuth} from "../../../Services/Auth/Auth-services"
+import {RegistrationAuth, verifyEmail} from "../../../Services/Auth/Auth-services"
 import { useNavigate } from "react-router-dom";
 import SnackBar from "../../Snackbar/Snackbar";
 import {setGlobalState, useGlobalState} from "../../../StateAuth";
@@ -29,6 +29,7 @@ export default function Registration() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         RegistrationAuth(data.get("email"), data.get("password"), navigate)
+        verifyEmail()
 
     };
 
