@@ -49,7 +49,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             const text = ReactHtmlParser(questionTitle)
             for (let i = 0; i < text.length; i++) {
                 if (text[i].props){
-                    console.log(text[i].props.children)
+                    // console.log(text[i].props.children)
                     questionTitHighlight = questionTitHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
                 }
             }
@@ -85,7 +85,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             const text = ReactHtmlParser(questionDescription)
             for (let i = 0; i < text.length; i++) {
                 if (text[i].props){
-                    console.log(text[i].props.children)
+                    // console.log(text[i].props.children)
                     questionDescHighlight = questionDescHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
                 }
             }
@@ -121,7 +121,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             const text = ReactHtmlParser(answerDescription)
             for (let i = 0; i < text.length; i++) {
                 if (text[i].props){
-                    console.log(text[i].props.children)
+                    // console.log(text[i].props.children)
                     answerDescHighlight = answerDescHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
                 }
             }
@@ -146,7 +146,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
         setQuestionTitle(question_title)
         setQuestionDescription(question_description)
         setAnswerDescription(answer_description)
-        console.log(question_title)
+        // console.log(question_title)
 
     }, [question_title, question_description, answer_description])
 
