@@ -57,7 +57,7 @@ function resentEmail(){
 
 function verifyEmail(email){
     //var email = localStorage.getItem("userEmail")
-    axios.post(AUTH_URL + "/verify/" + email, {})
+    axios.get(AUTH_URL + "/verify/" + email)
         .then(res => {
             setGlobalState("showSnackBar", true)
         })
