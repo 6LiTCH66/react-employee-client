@@ -16,6 +16,14 @@ import "./Vastused-table.css"
 import {setGlobalState, useGlobalState} from "../../../StateAuth";
 import {getVastused} from "../../../Services/Vastused/Vastused-services";
 import SnackBar from "../../Snackbar/Snackbar";
+import Button from "@mui/material/Button";
+import io from "socket.io-client"
+
+const socket = io("https://employee-webserver.herokuapp.com/", {
+    forceNew: false,
+    transports: ['websocket'],
+    upgrade: false
+})
 
 const columns = [
     { id: 'id', label: 'ID' },
@@ -34,10 +42,8 @@ const columns = [
 
 
 export default function VastusedTable() {
-    const [data, setData] = useState([])
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [cleanupFunction, setCleanupFunction] = useState(false)
 
     const [questionTitle, setQuestionTitle] = useState("");
     const [questionDescription, setQuestionDescription] = useState("");
@@ -66,6 +72,13 @@ export default function VastusedTable() {
         setId(id)
     };
 
+    const start = () => {
+        socket.emit("start-client", "start test")
+    }
+    const stop = () => {
+        socket.emit("stop-client", "stop test")
+    }
+
     const fetchData = () => {
         getVastused().then(res => {
             setState(res.data)
@@ -83,6 +96,9 @@ export default function VastusedTable() {
         }
 
         fetchData()
+        socket.on("test event", data => {
+            console.log(data)
+        })
 
     }, [])
 
@@ -98,6 +114,8 @@ export default function VastusedTable() {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Button variant="contained" style={{margin: "20px"}} color="success" onClick={start}>Start</Button>
+            <Button variant="contained" style={{margin: "20px"}} color="error" onClick={stop}>Stop</Button>
             <AddHighlight
                 isDialogOpened={isOpen}
                 handleCloseDialog={() => setIsOpen(false)}

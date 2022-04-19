@@ -4,14 +4,18 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import {useState, useRef} from "react";
+import {useState, useRef, useEffect} from "react";
 import SnackBar from "../../Snackbar/Snackbar";
 import {updateVastused} from "../../../Services/Vastused/Vastused-services";
 import {setGlobalState, useGlobalState} from "../../../StateAuth";
+import ReactHtmlParser from 'react-html-parser';
+
 import "./Add-highlight.css"
 
 export default function AddHighlight({ isDialogOpened, handleCloseDialog, question_title, question_description, answer_description, id  }) {
-
+    const [questionTitle, setQuestionTitle] = useState(question_title)
+    const [questionDescription, setQuestionDescription] = useState(question_description)
+    const [answerDescription, setAnswerDescription] = useState(answer_description)
     const questionRef = useRef("")
     const questionDesRef = useRef("")
     const answerRef = useRef("")
@@ -30,18 +34,33 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
     }
 
     function questionTitleSelected(){
+
+
         const start = questionRef.current.selectionStart;
         const end = questionRef.current.selectionEnd;
-        const questionTitHighlight = questionRef.current.value.replace(
-            questionRef.current.value.substr(start, end - start),
-            "<span class='highlight'>"
-            + questionRef.current.value.substr(start, end - start) + "</span>")
+
+        if (end > 0){
+            var questionTitHighlight = questionRef.current.value.replace(
+                questionRef.current.value.substr(start, end - start),
+                "<span class='highlight'>"
+                + questionRef.current.value.substr(start, end - start) + "</span>")
+
+
+            const text = ReactHtmlParser(questionTitle)
+            for (let i = 0; i < text.length; i++) {
+                if (text[i].props){
+                    console.log(text[i].props.children)
+                    questionTitHighlight = questionTitHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
+                }
+            }
+            setQuestionTitle(questionTitHighlight)
+        }
 
         if (questionTitHighlight){
             var toJson = {question_title: questionTitHighlight}
             updateVastused(toJson, id)
             handleOpen()
-            handleCloseDialog(true)
+
             setGlobalState("refreshVastused", true)
             setGlobalState("showSnackBar", true)
         }else {
@@ -53,19 +72,31 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
 
     function questionDescriptionSelected(){
+
         const start = questionDesRef.current.selectionStart;
         const end = questionDesRef.current.selectionEnd;
-        const questionDescHighlight = questionDesRef.current.value.replace(
-            questionDesRef.current.value.substr(start, end - start),
-            "<span class='highlight'>"
-            + questionDesRef.current.value.substr(start, end - start) + "</span>")
+
+        if (end > 0){
+            var questionDescHighlight = questionDesRef.current.value.replace(
+                questionDesRef.current.value.substr(start, end - start),
+                "<span class='highlight'>"
+                + questionDesRef.current.value.substr(start, end - start) + "</span>")
+
+            const text = ReactHtmlParser(questionDescription)
+            for (let i = 0; i < text.length; i++) {
+                if (text[i].props){
+                    console.log(text[i].props.children)
+                    questionDescHighlight = questionDescHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
+                }
+            }
+            setQuestionDescription(questionDescHighlight)
+        }
+
 
         if (questionDescHighlight){
             var toJson = {question_description: questionDescHighlight}
             updateVastused(toJson, id)
-
             handleOpen()
-            handleCloseDialog(true)
             setGlobalState("refreshVastused", true)
             setGlobalState("showSnackBar", true)
         }
@@ -80,10 +111,22 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
     function answerDescriptionSelected() {
         const start = answerRef.current.selectionStart;
         const end = answerRef.current.selectionEnd;
-        const answerDescHighlight = answerRef.current.value.replace(
-            answerRef.current.value.substr(start, end - start),
-            "<span class='highlight'>"
-            + answerRef.current.value.substr(start, end - start) + "</span>")
+
+        if (end > 0){
+            var answerDescHighlight = answerRef.current.value.replace(
+                answerRef.current.value.substr(start, end - start),
+                "<span class='highlight'>"
+                + answerRef.current.value.substr(start, end - start) + "</span>")
+
+            const text = ReactHtmlParser(answerDescription)
+            for (let i = 0; i < text.length; i++) {
+                if (text[i].props){
+                    console.log(text[i].props.children)
+                    answerDescHighlight = answerDescHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
+                }
+            }
+            setAnswerDescription(answerDescHighlight)
+        }
 
 
         if (answerDescHighlight){
@@ -91,7 +134,6 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             updateVastused(toJson, id)
 
             handleOpen()
-            handleCloseDialog(true)
             setGlobalState("refreshVastused", true)
             setGlobalState("showSnackBar", true)
         }
@@ -100,6 +142,13 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
         }
 
     }
+    useEffect(() => {
+        setQuestionTitle(question_title)
+        setQuestionDescription(question_description)
+        setAnswerDescription(answer_description)
+        console.log(question_title)
+
+    }, [question_title, question_description, answer_description])
 
 
 
@@ -119,7 +168,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
                     inputProps={
                         { readOnly: true, }
                     }
-                    defaultValue={getInnerHtml(question_title)}
+                    defaultValue={getInnerHtml(questionTitle)}
                     inputRef={questionRef}
 
 
@@ -138,7 +187,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
                     fullWidth
                     id="filled-multiline-static"
                     variant="filled"
-                    defaultValue={getInnerHtml(question_description)}
+                    defaultValue={getInnerHtml(questionDescription)}
                     inputRef={questionDesRef}
                 />
                 <Button variant="contained" className="add-highlight" onClick={() => questionDescriptionSelected()}>Question description highlight</Button>
@@ -155,7 +204,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
                     label="Answer description"
                     type="text"
                     fullWidth
-                    defaultValue={getInnerHtml(answer_description)}
+                    defaultValue={getInnerHtml(answerDescription)}
                     inputRef={answerRef}
                 />
                 <Button variant="contained" className="add-highlight" onClick={() => answerDescriptionSelected()}>Answer description highlight</Button>

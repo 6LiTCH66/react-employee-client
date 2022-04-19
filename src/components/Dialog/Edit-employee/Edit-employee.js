@@ -39,7 +39,7 @@ export default function EditEmployee({isDialogOpened, handleCloseDialog, id, fir
                 email: email}
             updateEmployees(id, updatedEmployee)
                 .then(res => {
-                    handleCloseDialog(false);
+                    // handleCloseDialog(false);
                     setGlobalState("refreshEmployee", true)
                     setGlobalState("showSnackBar", true)
             })
@@ -57,6 +57,7 @@ export default function EditEmployee({isDialogOpened, handleCloseDialog, id, fir
     const [hasValue, setHasValue] = useState(false);
     const onFocus = () => setFocused(true);
     const onBlur = () => setFocused(false);
+
     useEffect(() => {
         setFirstName(first_name)
         setLastName(last_name)
