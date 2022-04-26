@@ -9,6 +9,7 @@ import SnackBar from "../../Snackbar/Snackbar";
 import {updateVastused} from "../../../Services/Vastused/Vastused-services";
 import {setGlobalState, useGlobalState} from "../../../StateAuth";
 import ReactHtmlParser from 'react-html-parser';
+import parse from "html-react-parser"
 
 import "./Add-highlight.css"
 
@@ -16,9 +17,6 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
     const [questionTitle, setQuestionTitle] = useState(question_title)
     const [questionDescription, setQuestionDescription] = useState(question_description)
     const [answerDescription, setAnswerDescription] = useState(answer_description)
-    const questionRef = useRef("")
-    const questionDesRef = useRef("")
-    const answerRef = useRef("")
 
     const handleClose = () => {
         handleCloseDialog(false)
@@ -35,26 +33,20 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
     function questionTitleSelected(){
 
-
-        const start = questionRef.current.selectionStart;
-        const end = questionRef.current.selectionEnd;
-
-        if (end > 0){
-            var questionTitHighlight = questionRef.current.value.replace(
-                questionRef.current.value.substr(start, end - start),
-                "<span class='highlight'>"
-                + questionRef.current.value.substr(start, end - start) + "</span>")
-
+        if (questionMouseUp()){
+            var questionTitHighlight = getInnerHtml(questionTitle).replace(
+                questionMouseUp(),
+                    "<span class='highlight'>" + questionMouseUp() + "</span>")
 
             const text = ReactHtmlParser(questionTitle)
             for (let i = 0; i < text.length; i++) {
                 if (text[i].props){
-                    // console.log(text[i].props.children)
                     questionTitHighlight = questionTitHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
                 }
             }
             setQuestionTitle(questionTitHighlight)
         }
+
 
         if (questionTitHighlight){
             var toJson = {question_title: questionTitHighlight}
@@ -73,23 +65,19 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
     function questionDescriptionSelected(){
 
-        const start = questionDesRef.current.selectionStart;
-        const end = questionDesRef.current.selectionEnd;
-
-        if (end > 0){
-            var questionDescHighlight = questionDesRef.current.value.replace(
-                questionDesRef.current.value.substr(start, end - start),
-                "<span class='highlight'>"
-                + questionDesRef.current.value.substr(start, end - start) + "</span>")
+        if (questionDesMouseUp()){
+            var questionDescHighlight = getInnerHtml(questionDescription).replace(
+                questionDesMouseUp(),
+                "<span class='highlight'>" + questionDesMouseUp() + "</span>")
 
             const text = ReactHtmlParser(questionDescription)
             for (let i = 0; i < text.length; i++) {
                 if (text[i].props){
-                    // console.log(text[i].props.children)
                     questionDescHighlight = questionDescHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
                 }
             }
             setQuestionDescription(questionDescHighlight)
+
         }
 
 
@@ -109,19 +97,15 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
 
     function answerDescriptionSelected() {
-        const start = answerRef.current.selectionStart;
-        const end = answerRef.current.selectionEnd;
 
-        if (end > 0){
-            var answerDescHighlight = answerRef.current.value.replace(
-                answerRef.current.value.substr(start, end - start),
-                "<span class='highlight'>"
-                + answerRef.current.value.substr(start, end - start) + "</span>")
+        if (answerMouseUp()){
+            var answerDescHighlight = getInnerHtml(answerDescription)
+                .replace(answerMouseUp(),
+                    "<span class='highlight'>" + answerMouseUp() + "</span>")
 
             const text = ReactHtmlParser(answerDescription)
             for (let i = 0; i < text.length; i++) {
                 if (text[i].props){
-                    // console.log(text[i].props.children)
                     answerDescHighlight = answerDescHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
                 }
             }
@@ -142,13 +126,31 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
         }
 
     }
+
+
     useEffect(() => {
         setQuestionTitle(question_title)
         setQuestionDescription(question_description)
         setAnswerDescription(answer_description)
-        // console.log(question_title)
 
     }, [question_title, question_description, answer_description])
+
+    const noop = (e) => {
+        e.preventDefault();
+        return false;
+    };
+
+    const questionMouseUp = () =>  {
+        return window.getSelection().toString()
+    }
+
+    const questionDesMouseUp = () =>  {
+        return window.getSelection().toString()
+    }
+
+    const answerMouseUp = () =>  {
+        return window.getSelection().toString()
+    }
 
 
 
@@ -156,57 +158,51 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
         <Dialog open={isDialogOpened} onClose={handleClose} >
             <DialogTitle>Vastused id:{id}</DialogTitle>
             <DialogContent>
-                <TextField
-                    id="filled-multiline-static"
-                    variant="filled"
-                    autoFocus
-                    margin="dense"
-                    label="Question title"
-                    type="text"
-                    fullWidth
-                    multiline
-                    inputProps={
-                        { readOnly: true, }
-                    }
-                    defaultValue={getInnerHtml(questionTitle)}
-                    inputRef={questionRef}
+                <div style={{marginTop: "15px"}}>
+                    <label htmlFor="questionTitle">Question title</label>
+                    <div id="questionTitle" contentEditable="true" className="custom-textarea"
+                         dangerouslySetInnerHTML={{__html: questionTitle.toString()}}
+                         onCut={noop}
+                         onCopy={noop}
+                         onPaste={noop}
+                         onKeyDown={noop}
+                         onMouseUpCapture={questionMouseUp}
+                    >
+                    </div>
+                </div>
 
-
-                />
                 <Button variant="contained" className="add-highlight" onClick={() => questionTitleSelected()}>Question title highlight</Button>
 
-                <TextField
-                    autoFocus
-                    inputProps={
-                        { readOnly: true, }
-                    }
-                    margin="dense"
-                    multiline
-                    label="Question description"
-                    type="text"
-                    fullWidth
-                    id="filled-multiline-static"
-                    variant="filled"
-                    defaultValue={getInnerHtml(questionDescription)}
-                    inputRef={questionDesRef}
-                />
+                <div style={{marginTop: "40px"}}>
+                    <label htmlFor="questionDes">Question description</label>
+                    <div id="questionDes" contentEditable="true" className="custom-textarea"
+                         dangerouslySetInnerHTML={{__html: questionDescription.toString()}}
+                         onCut={noop}
+                         onCopy={noop}
+                         onPaste={noop}
+                         onKeyDown={noop}
+                         onMouseUpCapture={questionDesMouseUp}
+                    >
+                    </div>
+                </div>
+
                 <Button variant="contained" className="add-highlight" onClick={() => questionDescriptionSelected()}>Question description highlight</Button>
 
-                <TextField
-                    id="filled-multiline-static"
-                    variant="filled"
-                    autoFocus
-                    inputProps={
-                        { readOnly: true, }
-                    }
-                    margin="dense"
-                    multiline
-                    label="Answer description"
-                    type="text"
-                    fullWidth
-                    defaultValue={getInnerHtml(answerDescription)}
-                    inputRef={answerRef}
-                />
+
+                <div style={{marginTop: "40px"}}>
+                    <label htmlFor="answerDes">Answer description</label>
+                    <div id="answerDes" contentEditable="true" className="custom-textarea"
+                         dangerouslySetInnerHTML={{__html: answerDescription.toString()}}
+                         onCut={noop}
+                         onCopy={noop}
+                         onPaste={noop}
+                         onKeyDown={noop}
+                         onMouseUpCapture={answerMouseUp}
+                    >
+                    </div>
+                </div>
+
+
                 <Button variant="contained" className="add-highlight" onClick={() => answerDescriptionSelected()}>Answer description highlight</Button>
 
 

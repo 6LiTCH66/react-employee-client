@@ -5,6 +5,11 @@ table {
 .highlight{
     background-color: yellow;
 }
+
+/*::placeholder{*/
+/*    color: yellow;*/
+/*}*/
+
 .edit-button{
     cursor: pointer;
 }
