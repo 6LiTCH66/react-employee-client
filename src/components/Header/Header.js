@@ -117,6 +117,13 @@ const ResponsiveAppBar = () => {
                             </Button>
 
                             <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}>
+                                <Link style={{textDecoration: "none", color: "white"}} to="/infolex">
+                                    infolex.lt
+                                </Link>
+                            </Button>
+
+                            <Button
                                 sx={{ my: 2, color: 'white', display: 'block' }} onClick={() => Logout(navigate)}>
                                 Logout
                             </Button>

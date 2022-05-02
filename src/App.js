@@ -12,6 +12,7 @@ import {useEffect} from "react";
 import ResendEmail from "./components/Card/Resend-email";
 import ChangePassword from "./components/Auth/Change-Password/Change-password";
 import VerifyEmail from "./components/Card/Verify-email";
+import InfoLexTable from "./components/Table/InfoLex-table/InfoLex-table";
 
 function App() {
     useEffect(() => {
@@ -43,6 +44,15 @@ function App() {
                 <AuthGuard>
                     <VastusedTable/>
                 </AuthGuard>
+
+                }/>
+
+            <Route
+                path="/infolex"
+                element={
+                    <AuthGuard>
+                        <InfoLexTable/>
+                    </AuthGuard>
 
                 }/>
 
