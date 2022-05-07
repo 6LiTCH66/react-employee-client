@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
 import AddHighlight from "../../Dialog/Add-Highlight/Add-highlight";
@@ -18,6 +18,9 @@ import {getVastused} from "../../../Services/Vastused/Vastused-services";
 import SnackBar from "../../Snackbar/Snackbar";
 import Button from "@mui/material/Button";
 import io from "socket.io-client"
+import FormControl from "@mui/material/FormControl";
+import {InputLabel, Select} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 
 const socket = io("https://employee-webserver.herokuapp.com/", {
     forceNew: false,
@@ -51,6 +54,7 @@ export default function VastusedTable() {
     const [id, setId] = useState("");
     const [refreshVastused] = useGlobalState("refreshVastused")
     const [openSnackBar] = useGlobalState("showSnackBar")
+    const [selectedCategory, setSelectedCategory] = useState();
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -87,6 +91,7 @@ export default function VastusedTable() {
             localStorage.removeItem("initialTime")
         })
     }
+    const [age, setAge] = React.useState('');
 
     useEffect(() => {
         if (localStorage.getItem("currentUser")){
@@ -100,6 +105,7 @@ export default function VastusedTable() {
             console.log(data)
         })
 
+
     }, [])
 
     useEffect(() =>{
@@ -110,6 +116,23 @@ export default function VastusedTable() {
             })
         }
     })
+
+
+
+    function handleCategoryChange(event) {
+        setSelectedCategory(event.target.value);
+    }
+
+    function getFilteredList(){
+        if (!selectedCategory){
+            return state
+        }
+        return state.filter((item) => item.source === selectedCategory)
+    }
+
+    var filteredList = useMemo(getFilteredList, [selectedCategory, state])
+
+
 
 
     return (
@@ -138,13 +161,29 @@ export default function VastusedTable() {
                                 <TableCell
                                     key={column.id}
                                     align={column.align}>
-                                    {column.label}
+                                    {column.label === "Source" ? (
+                                        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                            <InputLabel id="demo-simple-select-standard-label">{column.label}</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-standard-label"
+                                                id="demo-simple-select-standard"
+                                                value={selectedCategory || ""}
+                                                onChange={handleCategoryChange}
+                                                label="Source">
+                                                <MenuItem value="">All</MenuItem>
+                                                <MenuItem value="vastused.ee">vastused.ee</MenuItem>
+                                                <MenuItem value="infolex.lt">infolex.lt</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    ):(
+                                        <div>{column.label}</div>
+                                    )}
                                 </TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {state.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        {filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => (
                             <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell component="th" scope="row">
@@ -159,6 +198,7 @@ export default function VastusedTable() {
                                 <TableCell align="left">{row.question_date}</TableCell>
                                 <TableCell align="left">{JSON.stringify(row.answer_title, null, 2)}</TableCell>
                                 <TableCell align="left" dangerouslySetInnerHTML={{__html: row.answer_description}}/>
+
                                 <TableCell align="left">{row.source}</TableCell>
 
                                 <TableCell align="left">
@@ -166,8 +206,6 @@ export default function VastusedTable() {
                                         handleOpen(row.question_title, row.question_description, row.answer_description, row.id)}
                                                      className="edit-button" color="secondary"/>
                                 </TableCell>
-
-
                             </TableRow>
 
                         ))}
@@ -178,7 +216,7 @@ export default function VastusedTable() {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 20]}
                 component="div"
-                count={state.length}
+                count={filteredList.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

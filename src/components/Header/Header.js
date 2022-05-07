@@ -112,7 +112,7 @@ const ResponsiveAppBar = () => {
                             <Button
                                 sx={{ my: 2, color: 'white', display: 'block' }}>
                                 <Link style={{textDecoration: "none", color: "white"}} to="/vastused">
-                                    Vastused.ee
+                                    Content
                                 </Link>
                             </Button>
 

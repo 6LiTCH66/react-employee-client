@@ -4,12 +4,17 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import {useState, useRef, useEffect} from "react";
+import {useState, useRef, useEffect, createRef} from "react";
 import SnackBar from "../../Snackbar/Snackbar";
 import {updateVastused} from "../../../Services/Vastused/Vastused-services";
 import {setGlobalState, useGlobalState} from "../../../StateAuth";
 import ReactHtmlParser from 'react-html-parser';
+import $ from 'jquery';
+
 import parse from "html-react-parser"
+
+import Highlighter from "react-highlight-words";
+
 
 import "./Add-highlight.css"
 
@@ -17,6 +22,8 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
     const [questionTitle, setQuestionTitle] = useState(question_title)
     const [questionDescription, setQuestionDescription] = useState(question_description)
     const [answerDescription, setAnswerDescription] = useState(answer_description)
+    const [answerDescHighlighted, setAnswerDescHighlighted] = useState([""])
+
 
     const handleClose = () => {
         handleCloseDialog(false)
@@ -98,24 +105,52 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
     function answerDescriptionSelected() {
 
+
+
         if (answerMouseUp()){
+
+            let arr = []
+
             var answerDescHighlight = getInnerHtml(answerDescription)
-                .replace(answerMouseUp(),
+                .replaceAll(answerMouseUp(),
                     "<span class='highlight'>" + answerMouseUp() + "</span>")
 
-            const text = ReactHtmlParser(answerDescription)
-            for (let i = 0; i < text.length; i++) {
-                if (text[i].props){
-                    answerDescHighlight = answerDescHighlight.replace(text[i].props.children[0], "<span class='highlight'>" + text[i].props.children[0] + "</span>")
-                }
-            }
+
+            // const text = document.querySelectorAll("#answerDes .highlight")
+            //
+            //
+            // console.log(typeof Array.prototype.slice.call(text))
+            //
+            // for (const s of text) {
+            //     arr.push(s.textContent)
+            //     answerDescHighlight = answerDescHighlight
+            //         .replaceAll(s.textContent, "<span class='highlight'>" + s.textContent + "</span>")
+            // }
+            // arr = [...new Set(arr)];
+            // console.log(arr)
+
+
+
+            // const text = parse(answerDescription)
+            //
+            // for (let i = 0; i < text.length; i++) {
+            //     if (text[i].props){
+            //
+            //         answerDescHighlight = answerDescHighlight.replaceAll(text[i].props.children,
+            //             "<span class='highlight'>" + text[i].props.children + "</span>")
+            //
+            //     }
+            // }
+
             setAnswerDescription(answerDescHighlight)
+
         }
 
 
+
         if (answerDescHighlight){
-            var toJson = {answer_description: answerDescHighlight}
-            updateVastused(toJson, id)
+            // var toJson = {answer_description: answerDescHighlight}
+            // updateVastused(toJson, id)
 
             handleOpen()
             setGlobalState("refreshVastused", true)
@@ -160,7 +195,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
             <DialogContent>
                 <div style={{marginTop: "15px"}}>
                     <label htmlFor="questionTitle">Question title</label>
-                    <div id="questionTitle" contentEditable="true" className="custom-textarea"
+                    <div id="questionTitle" className="custom-textarea"
                          dangerouslySetInnerHTML={{__html: questionTitle.toString()}}
                          onCut={noop}
                          onCopy={noop}
@@ -175,7 +210,7 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
                 <div style={{marginTop: "40px"}}>
                     <label htmlFor="questionDes">Question description</label>
-                    <div id="questionDes" contentEditable="true" className="custom-textarea"
+                    <div id="questionDes" className="custom-textarea"
                          dangerouslySetInnerHTML={{__html: questionDescription.toString()}}
                          onCut={noop}
                          onCopy={noop}
@@ -191,16 +226,17 @@ export default function AddHighlight({ isDialogOpened, handleCloseDialog, questi
 
                 <div style={{marginTop: "40px"}}>
                     <label htmlFor="answerDes">Answer description</label>
-                    <div id="answerDes" contentEditable="true" className="custom-textarea"
+                    <div id="answerDes" className="custom-textarea"
                          dangerouslySetInnerHTML={{__html: answerDescription.toString()}}
                          onCut={noop}
                          onCopy={noop}
                          onPaste={noop}
                          onKeyDown={noop}
-                         onMouseUpCapture={answerMouseUp}
-                    >
+                         onMouseUp={answerMouseUp}
+                        >
                     </div>
                 </div>
+
 
 
                 <Button variant="contained" className="add-highlight" onClick={() => answerDescriptionSelected()}>Answer description highlight</Button>
